@@ -19,8 +19,8 @@ func main() {
 	mux.Handle("POST /register", http.HandlerFunc(Registration))
 
 	// server listner
-	fmt.Println("server running at localhost:2121")
-	err := http.ListenAndServe(":2121", mux)
+	fmt.Println("server running at localhost:8080")
+	err := http.ListenAndServe(":8080", mux)
 	if err != nil {
 		fmt.Println(err)
 	}
