@@ -16,3 +16,13 @@ type Response struct {
 	Msg         string      `json:"msg"`
 	Data        interface{} `json:"data,omitempty"`
 }
+
+type Book struct {
+	MongoId   interface{} `json:"mongoId,omitempty" bson:"mongoId,omitempty"`
+	BookId    string      `json:"bookId,omitempty" bson:"bookId,omitempty"`
+	Title     string      `json:"title" bson:"title"`
+	Author    string      `json:"author" bson:"author"`
+	Genre     string      `json:"genre" bson:"genre"`
+	Status    string      `json:"status" bson:"status"`
+	BookCount int         `json:"bookCount" bson:"bookCount"`
+}

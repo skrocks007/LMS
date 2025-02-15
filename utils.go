@@ -31,7 +31,26 @@ func UserRegistorRequestValidator(req UserRegister) error {
 	return nil
 }
 
-func GenerateUserID() int {
+func GenerateID() int {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return r.Intn(900000) + 100000 // Generates number between 100000 and 999999
+}
+
+func BookRegistorRequestValidator(req Book) error {
+	if req.Title == "" {
+		return errors.New("'title' key is empty")
+	}
+	if req.Author == "" {
+		return errors.New("'author' key is empty")
+	}
+	if req.Genre == "" {
+		return errors.New("'genre' key is empty")
+	}
+	if req.Status == "" {
+		return errors.New("'status' key is empty")
+	}
+	if req.BookCount == 0 {
+		return errors.New("'bookCount' key is empty")
+	}
+	return nil
 }

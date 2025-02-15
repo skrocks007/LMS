@@ -9,6 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+//mongo connection -> database -> collection -> document
+//SQL -> database -> table -> feild
+
 func ConnectMongoDB() *mongo.Client {
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017") // Change if your DB is hosted elsewhere
 
@@ -28,8 +31,10 @@ func ConnectMongoDB() *mongo.Client {
 }
 
 func GetCollection(collectionName string) *mongo.Collection {
-	if Client == nil {
-		Client = ConnectMongoDB()
-	}
-	return Client.Database("LMS").Collection(collectionName)
+	// if Client == nil {
+	// 	Client = ConnectMongoDB()
+	// }
+	collection := Client.Database("LMS").Collection(collectionName)
+
+	return collection
 }
