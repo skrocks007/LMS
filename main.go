@@ -11,7 +11,7 @@ var Client *mongo.Client
 
 func main() {
 
-	ConnectMongoDB()
+	Client = ConnectMongoDB()
 
 	mux := http.NewServeMux()
 
