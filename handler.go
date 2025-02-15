@@ -6,7 +6,7 @@ import (
 )
 
 func Registration(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("ContentType", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	var req UserRegister
 	err := json.NewDecoder(r.Body).Decode(&req)
