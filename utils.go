@@ -54,3 +54,13 @@ func BookRegistorRequestValidator(req Book) error {
 	}
 	return nil
 }
+
+func BorrowValidator(req Borrow) error {
+	if req.BookId == "" {
+		return errors.New("'bookId' key is empty")
+	}
+	if req.UserId == "" {
+		return errors.New("'userId' key is empty")
+	}
+	return nil
+}
