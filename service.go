@@ -138,3 +138,65 @@ func fetchBook(bookId string) (BookData, error) {
 	}
 	return bookData, nil
 }
+
+func BookReturnService(req Borrow) (any, error) {
+	_, err := fetchBook(req.BookId)
+	if err != nil {
+		return interface{}(nil), errors.New("Invalid BookId")
+	}
+
+	err = fetchUser(req.UserId)
+	if err != nil {
+		return interface{}(nil), errors.New("Invalid UserId")
+	}
+
+	bookIssueData, err := fetchBookIssueRecord(req)
+	if err != nil {
+		return interface{}(nil), err
+	}
+	err = updateBookCount(req.BookId)
+	if err != nil {
+		return interface{}(nil), err
+	}
+	return bookIssueData, nil
+}
+
+func updateBookCount(bookId string) error {
+	coll := GetCollection("BookInfo")
+	filter := bson.M{"bookId": bookId}
+	update := bson.M{
+		"$set": bson.M{
+			"status": "available",
+		},
+		"$inc": bson.M{
+			"bookCount": 1,
+		},
+	}
+	result := coll.FindOneAndUpdate(context.Background(), filter, update)
+	if result.Err() != nil {
+		return result.Err()
+	}
+	return nil
+}
+
+func fetchBookIssueRecord(req Borrow) (BorrowDB, error) {
+	coll := GetCollection("BookIssueRecord")
+	filter := bson.M{
+		"userId":     req.UserId,
+		"bookId":     req.BookId,
+		"isReturned": false,
+	}
+	returnDate := time.Now().Truncate(24 * time.Hour)
+	update := bson.M{
+		"$set": bson.M{
+			"isReturned": true,
+			"returnDate": returnDate,
+		},
+	}
+	var issueRecord BorrowDB
+	err := coll.FindOneAndUpdate(context.Background(), filter, update).Decode(&issueRecord)
+	if err != nil {
+		return BorrowDB{}, err
+	}
+	return issueRecord, nil
+}

@@ -19,6 +19,7 @@ func main() {
 	mux.Handle("POST /register", http.HandlerFunc(Registration))
 	mux.Handle("POST /register/book", http.HandlerFunc(BookRegistration))
 	mux.Handle("POST /borrow/book", http.HandlerFunc(BookBorrow))
+	mux.Handle("POST /return/book", http.HandlerFunc(BookReturn))
 
 	// server listner
 	fmt.Println("server running at localhost:2121")
