@@ -138,23 +138,3 @@ func fetchBook(bookId string) (BookData, error) {
 	}
 	return bookData, nil
 }
-
-// Book Request
-
-// userId
-// BookId
-
-// validating user -> ValidateUser() -> check in DB
-// validating book -> ValidateBook() -> check in DB
-
-//BookIssueRecord
-
-// already have user registered
-// already have book registered
-
-// book borrow request ->
-// 	verify if user is valid ->
-// 		verify if book is valid ->
-// 			check if book is available ->
-// 				Issue book and update booInfo (reduce book count by 1)
-// 				if book count becomes 0 then mark it not available
