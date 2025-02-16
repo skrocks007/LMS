@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func Registration(w http.ResponseWriter, r *http.Request) {
+func UserRegistration(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var req UserRegister
@@ -21,7 +21,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		w.Write(rp)
 		return
 	}
-	err = UserRegistorRequestValidator(req)
+	updatedReq, err := UserRegistorRequestValidator(req)
 	if err != nil {
 		res := Response{
 			ServiceName: "LMS",
@@ -33,7 +33,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		w.Write(rp)
 		return
 	}
-	data, err := RegistrationService(req)
+	data, err := RegistrationService(updatedReq)
 	if err != nil {
 		res := Response{
 			ServiceName: "LMS",
