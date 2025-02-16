@@ -10,7 +10,8 @@ type UserRegister struct {
 	MongoId interface{} `json:"mongoId,omitempty" bson:"mongoId,omitempty"`
 	UserId  string      `json:"userId,omitempty" bson:"userId,omitempty"`
 	Name    string      `json:"name" bson:"name"`
-	Age     int         `json:"age" bson:"age"`
+	DOB     string      `json:"dob" bson:"dob"`
+	Age     int         `json:"age,omitempty" bson:"age,omitempty"`
 	Email   string      `json:"email" bson:"email"`
 	Contact string      `json:"contact" bson:"contact"`
 	Role    string      `json:"role" bson:"role"`

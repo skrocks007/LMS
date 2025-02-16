@@ -16,7 +16,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	// API
-	mux.Handle("POST /register/user", http.HandlerFunc(Registration))
+	mux.Handle("POST /register/user", http.HandlerFunc(UserRegistration))
 	mux.Handle("POST /register/book", http.HandlerFunc(BookRegistration))
 	mux.Handle("POST /borrow/book", http.HandlerFunc(BookBorrow))
 	mux.Handle("POST /return/book", http.HandlerFunc(BookReturn))

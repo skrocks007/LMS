@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func Registration(w http.ResponseWriter, r *http.Request) {
+func UserRegistration(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var req UserRegister
