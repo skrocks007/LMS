@@ -134,6 +134,25 @@ func BookBorrow(w http.ResponseWriter, r *http.Request) {
 		w.Write(rp)
 		return
 	}
-	BorrowService(req)
-
+	result, err := BorrowService(req)
+	if err != nil {
+		res := Response{
+			ServiceName: "LMS",
+			StatusCode:  http.StatusInternalServerError,
+			Msg:         err.Error(),
+		}
+		rp := responseSender(res)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(rp)
+		return
+	}
+	res := Response{
+		ServiceName: "LMS",
+		StatusCode:  http.StatusOK,
+		Msg:         "Book Issued",
+		Data:        result,
+	}
+	rp := responseSender(res)
+	w.WriteHeader(http.StatusOK)
+	w.Write(rp)
 }

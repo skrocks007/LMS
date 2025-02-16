@@ -1,6 +1,10 @@
 package main
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type UserRegister struct {
 	MongoId interface{} `json:"mongoId,omitempty" bson:"mongoId,omitempty"`
@@ -30,9 +34,8 @@ type Book struct {
 }
 
 type Borrow struct {
-	LoanId interface{} `json:"_id,omitempty" bson:"_id,omitempty"`
-	BookId string      `json:"bookId,omitempty" bson:"bookId,omitempty"`
-	UserId string      `json:"userId,omitempty" bson:"userId,omitempty"`
+	BookId string `json:"bookId,omitempty" bson:"bookId,omitempty"`
+	UserId string `json:"userId,omitempty" bson:"userId,omitempty"`
 }
 
 type UserData struct {
@@ -46,11 +49,20 @@ type UserData struct {
 }
 
 type BookData struct {
-	Id        primitive.ObjectID `json:"mongoId,omitempty" bson:"mongoId,omitempty"`
+	Id        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	BookId    string             `json:"bookId,omitempty" bson:"bookId,omitempty"`
 	Title     string             `json:"title" bson:"title"`
 	Author    string             `json:"author" bson:"author"`
 	Genre     string             `json:"genre" bson:"genre"`
 	Status    string             `json:"status" bson:"status"`
 	BookCount int                `json:"bookCount" bson:"bookCount"`
+}
+type BorrowDB struct {
+	Id         interface{} `bson:"_id,omitempty" json:"_id,omitempty"`
+	UserId     string      `bson:"userId" json:"userId"`
+	BookId     string      `bson:"bookId" json:"bookId"`
+	IsReturned bool        `bson:"isReturned" json:"isReturned"`
+	IssueDate  time.Time   `bson:"issueDate" json:"issueDate"`
+	DueDate    time.Time   `bson:"dueDate" json:"dueDate"`
+	ReturnDate *time.Time  `bson:"returnDate,omitempty" json:"returnDate,omitempty"`
 }
