@@ -8,6 +8,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func RegistrationService(req UserRegister) (UserRegister, error) {
@@ -41,13 +42,21 @@ func BorrowService(req Borrow) (any, error) {
 	}
 	bookData, err := fetchBook(req.BookId)
 	if err != nil {
+
 		return interface{}(nil), err
+	}
+	issuedBook, err := checkForDuplicateBookIssue(req)
+	if err != nil {
+		return interface{}(nil), err
+	}
+
+	if len(issuedBook) > 0 {
+		return issuedBook, errors.New("book alredy issued")
 	}
 
 	if bookData.Status != "available" && bookData.BookCount == 0 {
 		return interface{}(nil), errors.New("requested book not available")
 	}
-
 	err = updateBookInfo(req.BookId)
 	if err != nil {
 		return interface{}(nil), err
@@ -59,6 +68,28 @@ func BorrowService(req Borrow) (any, error) {
 	}
 
 	return data, nil
+}
+
+func checkForDuplicateBookIssue(req Borrow) ([]interface{}, error) {
+	coll := GetCollection("BookIssueRecord")
+	filter := bson.M{
+		"bookId":     req.BookId,
+		"userId":     req.UserId,
+		"isReturned": false,
+	}
+	opts := options.Find().SetProjection(bson.M{
+		"_id": 1,
+	})
+	cur, err := coll.Find(context.Background(), filter, opts)
+	if err != nil {
+		return []interface{}(nil), err
+	}
+	var issuedBook []interface{}
+	err = cur.All(context.Background(), &issuedBook)
+	if err != nil {
+		return []interface{}(nil), err
+	}
+	return issuedBook, nil
 }
 
 func updateBookInfo(bookId string) error {
