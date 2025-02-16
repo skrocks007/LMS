@@ -55,6 +55,8 @@ func UserRegistration(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(rp)
 }
+
+// add validation for book-registration
 func BookRegistration(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
