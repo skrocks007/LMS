@@ -26,3 +26,9 @@ type Book struct {
 	Status    string      `json:"status" bson:"status"`
 	BookCount int         `json:"bookCount" bson:"bookCount"`
 }
+
+type Borrow struct {
+	LoanId interface{} `json:"_id,omitempty" bson:"_id,omitempty"`
+	BookId string      `json:"bookId,omitempty" bson:"bookId,omitempty"`
+	UserId string      `json:"userId,omitempty" bson:"userId,omitempty"`
+}
