@@ -122,5 +122,18 @@ func BookBorrow(w http.ResponseWriter, r *http.Request) {
 		w.Write(rp)
 		return
 	}
+	err = BorrowValidator(req)
+	if err != nil {
+		res := Response{
+			ServiceName: "LMS",
+			StatusCode:  http.StatusBadRequest,
+			Msg:         err.Error(),
+		}
+		rp := responseSender(res)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(rp)
+		return
+	}
+	BorrowService(req)
 
 }
