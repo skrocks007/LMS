@@ -15,28 +15,29 @@ func responseSender(resp Response) []byte {
 	res, _ := json.Marshal(resp)
 	return res
 }
-func UserRegistorRequestValidator(req UserRegister) error {
+func UserRegistorRequestValidator(req UserRegister) (UserRegister, error) {
 	err := validateName(req.Name) // validating name based on rules
 	if err != nil {
-		return err
+		return UserRegister{}, err
 	}
-	_, err = validateDOB(req.DOB)
+	age, err := validateDOB(req.DOB)
 	if err != nil {
-		return err
+		return UserRegister{}, err
 	}
+	req.Age = age
 	err = validateEmail(req.Email)
 	if err != nil {
-		return err
+		return UserRegister{}, err
 	}
 	err = validateContact(req.Contact)
 	if err != nil {
-		return err
+		return UserRegister{}, err
 	}
 	err = validateRole(req.Role)
 	if err != nil {
-		return err
+		return UserRegister{}, err
 	}
-	return nil
+	return req, nil
 }
 
 func validateRole(reqRole string) error {

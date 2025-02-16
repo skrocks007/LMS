@@ -8,6 +8,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -15,12 +16,44 @@ func RegistrationService(req UserRegister) (UserRegister, error) {
 	userId := GenerateID()
 	req.UserId = strconv.Itoa(userId)
 	coll := GetCollection("UserInfo")
+	err := checkDuplicateUser(coll, req)
+	if err != nil {
+		return UserRegister{}, err
+	}
 	result, err := coll.InsertOne(context.Background(), req)
 	if err != nil {
 		return UserRegister{}, err
 	}
 	req.MongoId = result.InsertedID
 	return req, nil
+}
+
+func checkDuplicateUser(coll *mongo.Collection, req UserRegister) error {
+	filter := bson.M{
+		"$or": []bson.M{
+			{"userId": req.UserId},
+			{"email": req.Email},
+			{"contact": req.Contact},
+		},
+	}
+	var existingUser UserData
+	err := coll.FindOne(context.TODO(), filter).Decode(&existingUser)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			// No duplicates found, so return nil
+			return nil
+		}
+		return err // Other DB error
+	}
+	switch {
+	case existingUser.UserId == req.UserId:
+		return errors.New("user with same userId is already present")
+	case existingUser.Email == req.Email:
+		return errors.New("user with same email is already present")
+	case existingUser.Contact == req.Contact:
+		return errors.New("user with same contact is already present")
+	}
+	return nil
 }
 
 func BookRegistrationService(req Book) (Book, error) {
